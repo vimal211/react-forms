@@ -29,7 +29,6 @@ class Form extends Component {
       country: "IN",
     };
   }
-
   switchPersonal = () => {
     this.setState({ category: "Personal", step: 1 });
     console.log(this.state.category);
@@ -45,7 +44,7 @@ class Form extends Component {
     });
   };
   changeEmail = (e) => {
-    if ((this.state.category = "Personal")) {
+    if (this.state.category === "Personal") {
       this.setState({
         personal: { ...this.state.personal, email: e.target.value },
       });
@@ -66,7 +65,7 @@ class Form extends Component {
     });
   };
   changePh = (e) => {
-    if ((this.state.category = "Personal")) {
+    if (this.state.category === "Personal") {
       this.setState({
         personal: { ...this.state.personal, phoneNumber: e.target.value },
       });
@@ -79,8 +78,10 @@ class Form extends Component {
 
   nextBtn = (e) => {
     let num = this.state.step;
-    this.setState({ step: num + 1 });
-    e.preventDefault();
+    if (num < 3) {
+      this.setState({ step: num + 1 });
+      e.preventDefault();
+    }
   };
 
   renderForm1 = () => {
@@ -93,13 +94,25 @@ class Form extends Component {
             onChange={this.changeFN}
             type="text"
             placeholder="First name"
+            required
           />
-          <input onChange={this.changeLN} type="text" placeholder="Last name" />
-          <input onChange={this.changeEmail} type="text" placeholder="Email" />
+          <input
+            onChange={this.changeLN}
+            type="text"
+            placeholder="Last name"
+            required
+          />
+          <input
+            onChange={this.changeEmail}
+            type="text"
+            placeholder="Email"
+            required
+          />
           <input
             onChange={this.changePh}
             type="text"
             placeholder="Phone number"
+            required
           />
         </div>
       );
@@ -111,24 +124,28 @@ class Form extends Component {
             type="text"
             placeholder="Full name"
             defaultValue={this.state.buisness.fullName}
+            required
           />
           <input
             onChange={this.changeBN}
             type="text"
             placeholder="Buisness name"
             defaultValue={this.state.buisness.buisnessName}
+            required
           />
           <input
             onChange={this.changeEmail}
             type="text"
             placeholder="Email"
             defaultValue={this.state.buisness.email}
+            required
           />
           <input
             onChange={this.changePh}
             type="number"
             placeholder="Phone number"
             defaultValue={this.state.buisness.phoneNumber}
+            required
           />
         </div>
       );
@@ -152,7 +169,7 @@ class Form extends Component {
             <select onChange={this.changeCountry} id="Country" name="Country">
               <option value="IN">India</option>
               <option value="USA">United States of America</option>
-            </select>{" "}
+            </select>
           </div>
           <div className="tag">
             <p>Currency</p>
@@ -163,8 +180,8 @@ class Form extends Component {
             <p>Local bank details</p>
           </div>
           <div className="tag">
-            <input type="text" placeholder="IFSC code" />
-            <input type="text" placeholder="Account Number" />
+            <input type="text" placeholder="IFSC code" required />
+            <input type="text" placeholder="Account Number" required />
           </div>
         </div>
       );
@@ -177,7 +194,7 @@ class Form extends Component {
             <select onChange={this.changeCountry} id="Country" name="Country">
               <option value="IN">India</option>
               <option value="USA">United States of America</option>
-            </select>{" "}
+            </select>
           </div>
           <div className="tag">
             <p>Currency</p>
@@ -188,8 +205,8 @@ class Form extends Component {
             <p>Local bank details</p>
           </div>
           <div className="tag">
-            <input type="text" placeholder="ACH routing number" />
-            <input type="text" placeholder="Account Number" />
+            <input type="text" placeholder="ACH routing number" required />
+            <input type="text" placeholder="Account Number" required />
           </div>
         </div>
       );
@@ -206,13 +223,13 @@ class Form extends Component {
           <input type="text" defaultValue={country} readOnly />
         </div>
         <div className="tag">
-          <input type="text" placeholder="City" />
+          <input type="text" placeholder="City" required />
         </div>
         <div className="tag">
-          <input type="number" placeholder="Post code" />
+          <input type="number" placeholder="Post code" required />
         </div>
         <div className="tag">
-          <input type="text" placeholder="Address" />
+          <input type="text" placeholder="Address" required />
         </div>
       </div>
     );
@@ -247,50 +264,66 @@ class Form extends Component {
 
   render() {
     return (
-      <div className="Form_container">
-        <form className="form">
-          <div className="steps">
-            <div>
-              <p className={this.state.step <= 3 ? "stepActive" : ""}>
-                {this.state.step < 2 ? "1" : "✔"}
-              </p>
-              <p>Beneficiary</p>
+      <>
+        <div className="Form_container">
+          <form className="form">
+            <div className="steps">
+              <div>
+                <p className={this.state.step <= 3 ? "stepActive" : ""}>
+                  {this.state.step < 2 ? "1" : "✔"}
+                </p>
+                <p>Beneficiary</p>
+              </div>
+              <div>______________</div>
+              <div>
+                <p
+                  className={
+                    this.state.step > 1 && this.state.step <= 3
+                      ? "stepActive"
+                      : ""
+                  }
+                >
+                  {this.state.step < 3 ? "2" : "✔"}
+                </p>
+                <p>Bank details</p>
+              </div>
+              <div>______________</div>
+              <div>
+                <p className={this.state.step === 3 ? "stepActive" : ""}>
+                  {this.state.step < 4 ? "3" : "✔"}
+                </p>
+                <p>Address</p>
+              </div>
             </div>
-            <div>______________</div>
-            <div>
-              <p
-                className={
-                  this.state.step > 1 && this.state.step <= 3
-                    ? "stepActive"
-                    : ""
-                }
-              >
-                {this.state.step < 3 ? "2" : "✔"}
-              </p>
-              <p>Bank details</p>
-            </div>
-            <div>______________</div>
-            <div>
-              <p className={this.state.step === 3 ? "stepActive" : ""}>
-                {this.state.step < 4 ? "3" : "✔"}
-              </p>
-              <p>Address</p>
-            </div>
-          </div>
-          {this.renderCategory()}
-          {this.state.step === 1
-            ? this.renderForm1()
-            : this.state.step === 2
-            ? this.renderForm2()
-            : this.renderForm3()}
+            {this.renderCategory()}
+            {this.state.step === 1
+              ? this.renderForm1()
+              : this.state.step === 2
+              ? this.renderForm2()
+              : this.renderForm3()}
 
-          <div className="buttons">
-            <button onClick={this.nextBtn} className="nextBtn">
-              {this.state.step === 3 ? "Submit" : "Next"}
-            </button>
-          </div>
-        </form>
-      </div>
+            <div className="buttons">
+              {this.state.step === 3 ? (
+                <button
+                  type="submit"
+                  onClick={this.nextBtn}
+                  className="nextBtn"
+                >
+                  Submit
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  onClick={this.nextBtn}
+                  className="nextBtn"
+                >
+                  Next
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
+      </>
     );
   }
 }
